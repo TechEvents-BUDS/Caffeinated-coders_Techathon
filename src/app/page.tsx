@@ -9,14 +9,14 @@ export default function Home() {
         <CardHeader className="text-center">
           <CardTitle className="text-4xl font-bold text-purple-700 mb-2">Autism Early Signs Explorer</CardTitle>
           <CardDescription className="text-lg text-blue-600">
-            Interactive tools for parents and caregivers
+            Interactive tools and support for parents and caregivers
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-6">
           <div className="p-4 bg-yellow-100 rounded-lg">
-            <p className="text-gray-700">   
+            <p className="text-gray-700">
               This app helps identify potential early signs of autism in children through questionnaires and video analysis. 
-              Remember, these are screening tools – always consult with healthcare professionals for proper evaluation.
+              It also provides a platform for discussion and professional consultation.
             </p>
           </div>
           <div className="space-y-4">
@@ -28,6 +28,16 @@ export default function Home() {
             <Link href="/video-upload">
               <Button size="lg" variant="outline" className="w-full text-purple-700 border-purple-500 hover:bg-purple-100 font-bold py-3 px-6 rounded-full transition-all duration-300">
                 Upload Video for Analysis
+              </Button>
+            </Link>
+            <Link href="/forum">
+              <Button size="lg" variant="outline" className="w-full text-green-700 border-green-500 hover:bg-green-100 font-bold py-3 px-6 rounded-full transition-all duration-300">
+                Join Discussion Forum
+              </Button>
+            </Link>
+            <Link href="/consult">
+              <Button size="lg" variant="outline" className="w-full text-blue-700 border-blue-500 hover:bg-blue-100 font-bold py-3 px-6 rounded-full transition-all duration-300">
+                Consult Professionals
               </Button>
             </Link>
           </div>
