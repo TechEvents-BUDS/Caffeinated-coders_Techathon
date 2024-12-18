@@ -2,23 +2,26 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { StarIcon } from 'lucide-react'
+import { StarIcon, MapPin } from 'lucide-react'
 
 interface Professional {
   id: number;
   name: string;
   specialty: string;
   rating: number;
+  image: string;
+  location: string;
 }
 
 const professionals: Professional[] = [
-  { id: 1, name: "Dr. Emily Johnson", specialty: "Child Psychiatrist", rating: 4.8 },
-  { id: 2, name: "Dr. Michael Lee", specialty: "Developmental Pediatrician", rating: 4.6 },
-  { id: 3, name: "Dr. Sarah Thompson", specialty: "Child Psychologist", rating: 4.9 },
+  { id: 1, name: "Dr. Emily Johnson", specialty: "Child Psychiatrist", rating: 4.8, image: "/images/1.png?height=200&width=200", location: "123 Main St, Anytown, USA" },
+  { id: 2, name: "Dr. Michael Lee", specialty: "Developmental Pediatrician", rating: 4.6, image: "/images/3.jpeg?height=200&width=200", location: "456 Oak Ave, Somewhere, USA" },
+  { id: 3, name: "Dr. Sarah Thompson", specialty: "Child Psychologist", rating: 4.9, image: "/images/2.jpeg?height=200&width=200", location: "789 Pine Rd, Elsewhere, USA" },
 ]
 
 export default function Consult() {
@@ -28,14 +31,12 @@ export default function Consult() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // In a real app, this would send the consultation request
     alert(`Consultation request sent to ${selectedProfessional?.name}`)
     setMessage('')
   }
 
   const handleRating = (rating: number) => {
     setUserRating(rating)
-    // In a real app, this would update the professional's rating
     alert(`Thank you for rating ${selectedProfessional?.name} ${rating} stars!`)
   }
 
@@ -53,15 +54,20 @@ export default function Consult() {
             {professionals.map((prof) => (
               <Card key={prof.id} className={`cursor-pointer transition-all duration-300 ${selectedProfessional?.id === prof.id ? 'ring-2 ring-purple-500' : ''}`} onClick={() => setSelectedProfessional(prof)}>
                 <CardHeader>
+                  <Image src={prof.image} alt={prof.name} width={200} height={200} className="rounded-full mx-auto" />
                   <CardTitle>{prof.name}</CardTitle>
                   <CardDescription>{prof.specialty}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center">
+                  <div className="flex items-center mb-2">
                     {[...Array(5)].map((_, i) => (
                       <StarIcon key={i} className={`w-5 h-5 ${i < prof.rating ? 'text-yellow-400' : 'text-gray-300'}`} />
                     ))}
                     <span className="ml-2">{prof.rating.toFixed(1)}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    <span>{prof.location}</span>
                   </div>
                 </CardContent>
               </Card>

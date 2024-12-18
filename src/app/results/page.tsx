@@ -1,11 +1,16 @@
+"use client"
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react'
+import { CheckCircle, AlertTriangle, AlertCircle, Download } from 'lucide-react'
+import jsPDF from 'jspdf'
 
 export default function Results({ searchParams }: { searchParams: { score: string } }) {
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const score = parseInt(searchParams.score)
-  
+
   let resultMessage = ""
   let resultIcon = null
   let resultColor = ""
@@ -42,6 +47,34 @@ export default function Results({ searchParams }: { searchParams: { score: strin
     ]
   }
 
+  const generatePDF = () => {
+    setIsGeneratingPDF(true)
+    const pdf = new jsPDF()
+    
+    pdf.setFontSize(20)
+    pdf.text("Autism Screening Results", 20, 20)
+    
+    pdf.setFontSize(12)
+    pdf.text("Score: " + score, 20, 30)
+    
+    pdf.setFontSize(14)
+    pdf.text("Assessment:", 20, 40)
+    const splitMessage = pdf.splitTextToSize(resultMessage, 170)
+    pdf.text(splitMessage, 20, 50)
+    
+    pdf.setFontSize(14)
+    pdf.text("Recommendations:", 20, 90)
+    recommendations.forEach((rec, index) => {
+      pdf.text("• " + rec, 20, 100 + (index * 10))
+    })
+    
+    pdf.setFontSize(10)
+    pdf.text("This report is not a diagnosis. Please consult with a healthcare professional for proper evaluation.", 20, 280)
+    
+    pdf.save("autism-screening-results.pdf")
+    setIsGeneratingPDF(false)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-purple-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl bg-white/80 backdrop-blur-sm shadow-xl">
@@ -71,11 +104,25 @@ export default function Results({ searchParams }: { searchParams: { score: strin
               Return to Home
             </Button>
           </Link>
-          <Link href="/resources">
+          <Link href="/forum">
             <Button variant="outline" className="text-purple-700 border-purple-500 hover:bg-purple-100 font-bold py-2 px-4 rounded-full transition-all duration-300">
-              Explore Resources
+              Join Discussion Forum
             </Button>
           </Link>
+          <Button
+            onClick={generatePDF}
+            disabled={isGeneratingPDF}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 flex items-center"
+          >
+            {isGeneratingPDF ? (
+              "Generating..."
+            ) : (
+              <>
+                <Download className="mr-2" size={16} />
+                Download PDF
+              </>
+            )}
+          </Button>
         </CardFooter>
       </Card>
     </div>
